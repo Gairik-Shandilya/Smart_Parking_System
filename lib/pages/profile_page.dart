@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_parking_system/pages/vehicles.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,25 +10,29 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // Container buildkey({required IconData inputicon, String? textdata}) {
-  //   var inputicon;
-  //   return Container(
-  //     height: 60,
-  //     child: TextButton(
-
-  //       style: TextButton.styleFrom(
-
-  //         fixedSize: Size(double.infinity,50),
-  //       ),
-  //       onPressed: () {},
-  //       child: Row(
-  //         children: [Icon(inputicon,color: Colors.black,), Text(textdata!,style: TextStyle(fontSize: 16,color: Colors.black),)],
-  //       ),
-  //     ),
-  //   );
-  // }
+  final user = FirebaseAuth.instance.currentUser;
+  List<String> docIDs = [];
+  Future getdocId() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((element) {
+              print(element);
+              docIDs.add(element.reference.id);
+            }));
+  }
 
   @override
+  void initState() {
+    getdocId();
+    super.initState();
+  }
+
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // late User user = auth.currentUser!;
+  // late String userid = user.uid;
+  // late String vehicle = user.VehicleNo;
+
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
@@ -66,11 +70,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(120, 20),
-                        backgroundColor:const Color.fromARGB(255, 230, 206, 91)),
+                        backgroundColor:
+                            const Color.fromARGB(255, 230, 206, 91)),
                     child: const Text(
                       'Edit Profile',
                       style: TextStyle(fontSize: 17, color: Colors.black),
-                    ), 
+                    ),
                   )
                 ],
               )
@@ -99,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context,'vehicleroute');
+            Navigator.pushNamed(context, 'vehicleroute');
           },
           style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
           child: Padding(
