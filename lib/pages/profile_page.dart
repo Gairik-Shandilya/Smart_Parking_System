@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_parking_system/components/get_user_mail.dart';
+import 'package:smart_parking_system/components/get_user_name.dart';
+
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,31 +19,43 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser;
   List<String> docIDs = [];
+
+  // Function to fetch and display user data
+Future<void> fetchAndDisplayUserData() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    
+    if (userData.exists) {
+      Map<String, dynamic> userDataMap = userData.data() as Map<String, dynamic>;
+      String username = userDataMap['username'];
+      String email = userDataMap['email'];
+
+      // Display the user data in your app (e.g., set it in a text widget)
+      print('Username: $username');
+      print('Email: $email');
+    }
+  }
+}
+
+
   Future getdocId() async {
     await FirebaseFirestore.instance
         .collection('users')
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
-              print(element);
+              print(element.reference);
               docIDs.add(element.reference.id);
             }));
   }
 
-  @override
-  void initState() {
-    getdocId();
-    super.initState();
-  }
-
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // late User user = auth.currentUser!;
-  // late String userid = user.uid;
-  // late String vehicle = user.VehicleNo;
+  String userId = FirebaseAuth.instance.currentUser!.uid;
 
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -58,13 +77,17 @@ class _ProfilePageState extends State<ProfilePage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    'Esther Howard',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  FutureBuilder(
+                    future: getdocId(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return GetUserName(documentid: 'PlWgnDIJwTtQd0xPoPzN');
+                    },
                   ),
-                  const Text(
-                    'test@gmail.com',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  FutureBuilder(
+                    future: getdocId(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return GetUserMail(documentid: 'PlWgnDIJwTtQd0xPoPzN');
+                    },
                   ),
                   ElevatedButton(
                     onPressed: () {},

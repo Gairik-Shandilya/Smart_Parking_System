@@ -27,17 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  Future signUp() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim());
-    addUserDetails(
-        nameController.text.trim(),
-        vehiclenameController.text.trim(),
-        vehiclenoController.text.trim(),
-        emailController.text.trim());
-  }
-
+  
   Future addUserDetails(
       String name, String vehiclename, String vehicleno, String email) async {
     await FirebaseFirestore.instance.collection('users').add({
@@ -46,6 +36,16 @@ class _RegisterPageState extends State<RegisterPage> {
       'VehicleNo': vehicleno,
       'email': email,
     });
+  }
+Future signUp() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim());
+    addUserDetails(
+        nameController.text.trim(),
+        vehiclenameController.text.trim(),
+        vehiclenoController.text.trim(),
+        emailController.text.trim());
   }
 
   Widget build(BuildContext context) {
