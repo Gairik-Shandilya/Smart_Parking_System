@@ -20,31 +20,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser;
   List<String> docIDs = [];
 
-  // Function to fetch and display user data
-Future<void> fetchAndDisplayUserData() async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-    
-    if (userData.exists) {
-      Map<String, dynamic> userDataMap = userData.data() as Map<String, dynamic>;
-      String username = userDataMap['username'];
-      String email = userDataMap['email'];
-
-      // Display the user data in your app (e.g., set it in a text widget)
-      print('Username: $username');
-      print('Email: $email');
-    }
-  }
-}
-
-
   Future getdocId() async {
     await FirebaseFirestore.instance
         .collection('users')
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
-              print(element.reference);
               docIDs.add(element.reference.id);
             }));
   }
@@ -80,13 +60,13 @@ Future<void> fetchAndDisplayUserData() async {
                   FutureBuilder(
                     future: getdocId(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return GetUserName(documentid: 'PlWgnDIJwTtQd0xPoPzN');
+                      return GetUserName(documentid: userId);
                     },
                   ),
                   FutureBuilder(
                     future: getdocId(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return GetUserMail(documentid: 'PlWgnDIJwTtQd0xPoPzN');
+                      return GetUserMail(documentid: userId);
                     },
                   ),
                   ElevatedButton(
