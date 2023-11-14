@@ -5,9 +5,6 @@ import 'package:smart_parking_system/components/get_user_mail.dart';
 import 'package:smart_parking_system/components/get_user_name.dart';
 
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -22,13 +19,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future getdocId() async {
     await FirebaseFirestore.instance
-        .collection('users')
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((element) {
-              docIDs.add(element.reference.id);
-            }));
+      .collection(user!.uid)
+      .get()
+      .then((QuerySnapshot snapshot) {
+        snapshot.docs.forEach(( QueryDocumentSnapshot element) { 
+          docIDs.add(element.id);
+        });
+      });
   }
-
+  
+  
   String userId = FirebaseAuth.instance.currentUser!.uid;
 
   void signUserOut() {

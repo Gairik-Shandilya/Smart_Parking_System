@@ -9,7 +9,6 @@ class GetUserName extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
-
         future: users.doc(documentid).get(),
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

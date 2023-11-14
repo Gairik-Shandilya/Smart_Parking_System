@@ -15,7 +15,7 @@ class GetUserMail extends StatelessWidget {
             if(snapshot.hasData && snapshot.data!.data() != null){
               Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
-            return Text('${data['email']}',style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18),);
+            return Text('${data['Email']}',style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18),);
             }
           }
           return const Text('loading...');
