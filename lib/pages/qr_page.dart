@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -10,9 +12,56 @@ class QrPage extends StatefulWidget {
 
 class _QrPageState extends State<QrPage> {
   final GlobalKey globalKey = GlobalKey();
-  // ignore: non_constant_identifier_names
-  String qr_data = " ";
+  late String dataForCurrentUser;
+  bool _mounted = false;
+  String qr_data = "";
+
   @override
+  void initState() {
+    super.initState();
+    _mounted = true;
+    fetchDataForCurrentUser();
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
+  }
+
+  Future<void> fetchDataForCurrentUser() async {
+    try {
+      // Get the current user from Firebase Authentication
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Replace 'your_collection' with your Firestore collection name
+        // Replace 'uid' with the actual UID field in your Firestore documents
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        // Assuming you want to retrieve the value from the 'field_name' field
+        dataForCurrentUser = userSnapshot['VehicleNo'].toString();
+        if(_mounted){
+          setState(() {
+            qr_data = dataForCurrentUser;
+        });
+        }
+        
+        // Print the data for verification (you can remove this line in your final code)
+        print('Data for current user: $dataForCurrentUser');
+      } else {
+        // Handle the case where there is no current user
+        print('No current user');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -49,18 +98,6 @@ class _QrPageState extends State<QrPage> {
             const SizedBox(
               height: 50,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: TextField(
-                decoration: const InputDecoration(
-                    hintText: "Enter Data", border: OutlineInputBorder()),
-                onChanged: (value) {
-                  setState(() {
-                    qr_data = value;
-                  });
-                },
-              ),
-            )
           ],
         ),
       ),

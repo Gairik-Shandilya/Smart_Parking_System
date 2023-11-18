@@ -23,7 +23,7 @@ class _VehicleState extends State<Vehicle> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushNamed(context, "profilepage");
+                Navigator.pushNamed(context, "initialpage");
               },
             )),
         body: Center(

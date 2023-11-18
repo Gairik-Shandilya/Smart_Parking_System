@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_parking_system/auth/auth.dart';
+import 'package:smart_parking_system/auth/initial_page.dart';
 import 'package:smart_parking_system/pages/profile_page.dart';
 import 'package:smart_parking_system/pages/vehicles.dart';
 import 'firebase_options.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         "vehicleroute":(context)=>const Vehicle(),
-        "profilepage":(context)=>const ProfilePage()
+        "profilepage":(context)=>const ProfilePage(),
+        "initialpage":(contexxt)=>const InitialPage()
       },
       home: const AuthPage(),
     );
