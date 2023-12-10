@@ -19,7 +19,7 @@ class _InitialPageState extends State<InitialPage> {
   @override
   int _currentIndex = 0;
 
-  List <Widget> tabs = const <Widget> [
+  List <Widget> tabs =  <Widget> [
     HomePage(),
     QrPage(),
     QrScaner(),

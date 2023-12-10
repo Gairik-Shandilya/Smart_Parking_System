@@ -66,7 +66,7 @@ class _QrPageState extends State<QrPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: const Text('Generate QR Code'),
+        title: const Text('Vehicle QR Code'),
       ),
       body: SingleChildScrollView(
         child: Column(
