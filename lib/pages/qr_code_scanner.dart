@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:intl/intl.dart';
+import 'package:smart_parking_system/auth/initial_page.dart';
+import 'package:smart_parking_system/components/addtabledata.dart';
 import 'package:smart_parking_system/pages/home_page.dart';
 
 class QrScaner extends StatefulWidget {
@@ -19,7 +20,7 @@ class _QrScanerState extends State<QrScaner> {
   late String dataForCurrentUser;
   bool _mounted = false;
   bool isverified = false;
-  late DateTime currenttime;
+  HomePage homepage = HomePage();
 
   @override
   void initState() {
@@ -127,10 +128,11 @@ class _QrScanerState extends State<QrScaner> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              HomePage();
-                              setState(() {
-                                currenttime = DateTime.now();
-                              });
+                              addTableData();
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return InitialPage();
+                              }));
                             },
                             child: Text('Yes'),
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_parking_system/components/gettabledata.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,9 +24,30 @@ class DataEntry {
 
 
 class _HomePageState extends State<HomePage> {
-   List<DataEntry> dataEntries = [];
-
+  List<DataEntry> dataEntries = [];
+  void _handleParkingChoice(bool isCorrect, DateTime entryTime) {
+  DataEntry newEntry = DataEntry(
+    date: entryTime.toLocal().toString(), // Convert to local time if needed
+    entryTime: entryTime.toLocal().toString(),
+    exitTime: 'New Exit Time',
+    status: isCorrect ? 'Correct' : 'Wrong',
+  );
+  setState(() {
+    dataEntries.add(newEntry);
+  });
+}
   @override
+  void initState() {
+    super.initState();
+    // Call getTableData when the widget is initialized
+    fetchData();
+  }
+  Future<void> fetchData() async {
+    List<DataEntry> entries = await getTableData();
+    setState(() {
+      dataEntries = entries;
+    });
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -74,3 +96,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
